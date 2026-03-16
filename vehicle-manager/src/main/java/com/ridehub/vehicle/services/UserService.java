@@ -1,62 +1,58 @@
-package com.ridehub.vehicle.service;
+package com.ridehub.vehicle.services;
 
 import com.ridehub.vehicle.model.User;
-import com.ridehub.vehicle.exception.UserNotFoundException;
+import com.ridehub.vehicle.repositories.UserRepository;
+import com.ridehub.vehicle.exceptions.UserNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UserService {
 
-    private List<User> users = new ArrayList<>();
+    @Autowired
+    private UserRepository userRepository;
 
     public User register(User user) {
-        users.add(user);
-        return user;
+        return userRepository.save(user);
     }
 
     public User login(String username, String password) throws UserNotFoundException {
-        for (User user : users) {
-            if (user.getUsername().equals(username)
-                    && user.getPassword().equals(password)) {
-                return user;
-            }
+        User user = userRepository.findByUsername(username);
+
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        } else {
+            throw new UserNotFoundException("Invalid username or password");
         }
-        throw new UserNotFoundException("Invalid username or password");
     }
 
-    public User updateUser(String username, User updatedUser, String password)
-            throws UserNotFoundException {
+    public User updateUser(String username, User updatedUser, String password) throws UserNotFoundException {
 
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
+        User existingUser = userRepository.findByUsername(username);
 
-                if (!user.getPassword().equals(password)) {
-                    throw new UserNotFoundException("Incorrect password");
-                }
-
-                user.setEmail(updatedUser.getEmail());
-                user.setLicenseDetails(updatedUser.getLicenseDetails());
-                user.setDob(updatedUser.getDob());
-
-                return user;
-            }
+        if (existingUser == null) {
+            throw new UserNotFoundException("User not found with username: " + username);
         }
 
-        throw new UserNotFoundException("User not found with username: " + username);
+        if (!existingUser.getPassword().equals(password)) {
+            throw new UserNotFoundException("Incorrect password");
+        }
+
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setLicenseDetails(updatedUser.getLicenseDetails());
+        existingUser.setDob(updatedUser.getDob());
+
+        return userRepository.save(existingUser);
     }
 
-    public User getUserByUsername(String username)
-            throws UserNotFoundException {
+    public User getUserByUsername(String username) throws UserNotFoundException {
 
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return user;
-            }
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found with username: " + username);
         }
 
-        throw new UserNotFoundException("User not found with username: " + username);
+        return user;
     }
 }
