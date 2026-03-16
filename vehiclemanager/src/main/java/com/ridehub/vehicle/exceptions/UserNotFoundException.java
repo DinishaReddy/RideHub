@@ -1,4 +1,4 @@
-package com.ridehub.vehicle.exception;
+package com.ridehub.vehicle.exceptions;
 
 public class UserNotFoundException extends Exception {
 
