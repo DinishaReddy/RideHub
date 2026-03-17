@@ -16,7 +16,7 @@ public class RentalVehicleService {
     @Autowired
     private RentalVehicleRepository rentalVehicleRepository;
 
-    private static final String USER_SERVICE_URL = "http://localhost:8081/api/users/";
+    private static final String USER_SERVICE_URL = "http://vehiclemanager:8081/api/users/";
 
     public boolean isUserRegistered(String username) {
         RestTemplate restTemplate = new RestTemplate();

@@ -16,7 +16,7 @@ public class ExpenseLogService {
     @Autowired
     private ExpenseLogRepository expenseLogRepository;
 
-    private static final String VEHICLE_MANAGER_URL = "http://localhost:8081/api/vehicles/registration/";
+    private static final String VEHICLE_MANAGER_URL = "http://vehiclemanager:8081/api/vehicles/registration/";
 
     public boolean isVehicleRegistered(String registrationNumber) {
         RestTemplate restTemplate = new RestTemplate();
