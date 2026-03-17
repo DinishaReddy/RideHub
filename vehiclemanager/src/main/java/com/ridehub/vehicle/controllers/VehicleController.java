@@ -69,4 +69,15 @@ public class VehicleController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/registration/{registrationNumber}")
+    public ResponseEntity<?> getVehicleByRegistrationNumber(@PathVariable String registrationNumber) {
+        try {
+            Vehicle vehicle = vehicleService.getVehicleByRegistrationNumber(registrationNumber);
+            return ResponseEntity.ok(vehicle);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

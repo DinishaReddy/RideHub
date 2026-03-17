@@ -75,4 +75,9 @@ public class VehicleService {
 
         vehicleRepository.delete(vehicleOptional.get());
     }
+    public Vehicle getVehicleByRegistrationNumber(String registrationNumber) throws UserNotFoundException {
+    return vehicleRepository.findByRegistrationNumber(registrationNumber)
+            .orElseThrow(() -> new UserNotFoundException(
+                    "Vehicle not found with registration number: " + registrationNumber));
+    }
 }
